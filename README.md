@@ -1,20 +1,20 @@
 # Return on Financial Investment in American Public School Systems
-##### Chase Yarbrough, Jinyoung Eum, Ved Mohan
+## Chase Yarbrough, Jinyoung Eum, Ved Mohan
 
 ### Introduction
 Education is a pillar of society that factors into decisions with a variety of scopes with both short term and long term implications. A strong public education system has resounding implications ranging from which district families chose to settle in, adjacent property valuations, and larger more abstract relationships such as the financial growth of countries in the long run.
 
-##### Motivation
+#### Motivation
 Given a limited amount of funding each year, state and federal administrations are tasked with investing in various aspects of public education in order to improve the overall quality of learning.
 Our goal was to create a tool which demonstrates which areas to target spending and investments in order to receive the highest return on education quality.
 
-##### Problem Statement
-**X dollars invested in Y area will result in an average increase in educational performance by Z.**
+#### Problem Statement
+X dollars invested in Y area will result in an average increase in educational performance by Z.
 
 ### Data
 Two different sources of data were used, testing data and financial data
 
-##### Test Data
+#### Test Data
 Test score data from  National Assessment of Educational Progress (NAEP testing). NAEP has been selected as it is a standardized test administered at two grade levels, 4th grade and 8th grade. There are two different scores, measuring Math and English performance.
 
 Some characteristics of this data:
@@ -24,11 +24,12 @@ Some characteristics of this data:
 4. For 4th graders the average math test score is 240 and the average reading test score is 221.
 
 
-Dataset source: 
+
+To see the complete dataset source: 
 * https://nces.ed.gov/nationsreportcard/
 
 
-##### Financial Data
+#### Financial Data
 Financial data was sourced from the United States Census. Data between 2008 and 2017 tracked individual areas of investment on a state by state basis. The categories were as follows:
 
 * Salaries and Wages
@@ -43,73 +44,53 @@ Financial data was sourced from the United States Census. Data between 2008 and 
 
 ENTER SNAPSHOT OF DATA HERE
 
-Dataset source: 
+To see the complete dataset source: 
 * https://www.census.gov/data/tables/2008/econ/school-finances/secondary-education-finance.html
 
 
 #### Dividing Further into the Dataset
-Plotting Overall Score Average over the Years 2007-2017
+![Image 1](project1.PNG)"
 
-![Image 1](project1.PNG)
 
-Score average is slightly skewed, but loosely follows a gaussian distribution. This allowed us to continue without applying a normalization transformation such as Box-Cox. However, due to the order of magnitude difference between factors, columns were normalized relative to themselves.
-
-### Procedure
+### Our Approach
 We intend to perform a linear regression on aspects of each school system’s financing as well as the past year’s test scores against the current test scores to give an overall predictive formula for the change in a school’s performance based on differences in a state’s financial plan.
+![Image 2](project2.PNG)"
 
-![Image 2](project2.PNG)
+#### Procedure
+A preliminary check was done using a Pearson Correlation test. This purpose of this test is to check the correlation between individual factors and Overall Score Average, and we can note that we see the highest correlation factor in Per Pupil Instructional Spending.
 
-A preliminary check was done using a **Pearson Correlation** test. This checked the individual correlations between All Financial Investment Areas and Overall Score Average
+![Pearson_Correlation](project3.PNG)"
 
-![Image 3](project3.PNG)
-
-Highest correlation is Per Pupil Instructional Spending at 0.38. This seems reasonable: increasing spending per capita would positively affect performance. However, Pearson Correlation does not account for the impact of the variables combined. 
 
 #### Supervised
 
-In order to build on the preliminary exploration, a **Multiple Regression model** was created. Test and training data were split 20:80 respectively. 
+From our inital correlation checks, we wanted to move on to some more robust methods that could help us take a closer look at our problem statement: X dollars invested in Y area will result in an average increase in educational performance by Z. The majority of such a question lies under the category of Supervised Learning, and within Supervised Learning we will be looking at Multiple Linear Regression and Ridge Regression.
 
-Model Performance:
+## Mulitple Linear Regression
 
-* Mean Absolute Error: 0.0151
-* Mean Squared Error: 0.0003
-* Root Mean Squared Error: 0.0176
-
-![Image 4](project4.PNG)
-
-A sampling of the model performance (blue) versus actual data (orange)
-
-A summary of the coefficients returned:
-
-![Image 5](project5.PNG)
-
-It is apparent that when all areas of investment are considered together the following were most influential:
-
-* Per Pupil Instructional Spending **(+0.364695)
-* PP&E **(+0.194763)
-* Instructional Spending **(-0.411845)
-* Per Pupil Support System Spending **(-0.226041)
-
-These factors represent the two strongest correlations in the positive and negative directions. 
-**Ridge regression** shrinks the coefficients, reducing the model complexity and multi-collinearity. This allows us to cross check influential factors with Multiple Regression
+Before preforming our 
 
 
 
-To explore whether further investigation was required, the highest correlated factors were clustered by Overall Score Averages. Interestingly there was a strong linear correspondance, however, no clear clustering pattern emerged. 
+![Linear Performance](project4.PNG)"
+![Linear Correlations](project5.PNG)"
 
-INSERT IMAGE OF 
+## Ridge Regression
+![Ridge_Graph](project7.PNG)"
+![Ridge_Numbers](project6.PNG)"
 
 #### Unsupervised
+![GMM_PerPupilInstru_V_Score](Screen Shot 2020-04-08 at 11.24.17 PM.png)"
+![GMM_PPE_V_Score](Screen Shot 2020-04-08 at 6.38.24 PM (1).png)"
+![GMM_PerPupilSupport_V_Score](Screen Shot 2020-04-08 at 6.38.41 PM (1).png)"
+![GMM_PerPupilInstructional_V_Score](Screen Shot 2020-04-08 at 6.40.01 PM (1).png)"
 
 
-![Image 6](project6.PNG)
-![Image 7](project7.PNG)
+#### Conclusion
 
-### Unsupervised
-![Image 8](Screen Shot 2020-04-08 at 11.24.17 PM.png)
-![Image 9](Screen Shot 2020-04-08 at 6.38.24 PM (1).png)
-![Image 10](Screen Shot 2020-04-08 at 6.38.41 PM (1).png)
-![Image 11](Screen Shot 2020-04-08 at 6.40.01 PM (1).png)
-
-
-### Conclusion
+* Supervised Learning
+  We saw that Per Pupil Instructional Spending and PP&E were the two most positivly correlated features in our overall model, and Per       Pupil Support Spending and Instructional Spending were our two most negativly correlated features. If the core of our question is       which areas of spending are the best investment for school systems, this is the core of our answer.
+  
+* Unsupervised Learning
+  Our Gaussian Mixture Models showed clear clusters of large, high spending states in metrics that were not taken at a per pupil              level. It may be interesting to build on this project in a future study which takes the Census' publically released data and            attempts to answer the same question using only converted, per pupil metrics.
+  
